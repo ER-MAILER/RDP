@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ER Mailer — Premium RDP Services</title>
+    <title>ER Mailer — Cloud RDP Services</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -102,14 +102,118 @@
             color: var(--text-muted);
         }
 
-        .grid {
+        .providers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .provider-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--card-border);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .provider-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--accent), var(--accent-gold));
+        }
+
+        .provider-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+            border-color: rgba(66, 153, 225, 0.5);
+        }
+
+        .provider-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .aws { color: #FF9900; }
+        .tencent { color: #EE1C25; }
+        .gcp { color: #4285F4; }
+        .vultr { color: #007BFF; }
+
+        .provider-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .provider-subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .provider-features {
+            list-style: none;
+            margin: 15px 0;
+            flex-grow: 1;
+        }
+
+        .provider-features li {
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .provider-features li i {
+            color: var(--success);
+            margin-right: 10px;
+            font-size: 0.8rem;
+        }
+
+        .provider-button {
+            background: linear-gradient(to right, var(--accent), var(--accent-light));
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .provider-button:hover {
+            background: linear-gradient(to right, var(--accent-light), var(--accent));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(49, 130, 206, 0.4);
+        }
+
+        .plans-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 25px;
             margin-top: 30px;
         }
 
-        .card {
+        .plan-card {
             background: var(--card-bg);
             border-radius: 16px;
             padding: 25px;
@@ -124,7 +228,7 @@
             overflow: hidden;
         }
 
-        .card::before {
+        .plan-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -134,41 +238,41 @@
             background: linear-gradient(to right, var(--accent), var(--accent-gold));
         }
 
-        .card.featured {
+        .plan-card.featured {
             border: 2px solid var(--accent-gold);
             transform: scale(1.02);
         }
 
-        .card.featured::before {
+        .plan-card.featured::before {
             height: 6px;
             background: linear-gradient(to right, var(--accent-gold), var(--warning));
         }
 
-        .card:hover {
+        .plan-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
             border-color: rgba(66, 153, 225, 0.5);
         }
 
-        .card-header {
+        .plan-header {
             display: flex;
             align-items: center;
             margin-bottom: 15px;
         }
 
-        .card-icon {
+        .plan-icon {
             font-size: 2rem;
             margin-right: 15px;
             color: var(--accent);
         }
 
-        .card-title {
+        .plan-title {
             font-size: 1.4rem;
             font-weight: 600;
             color: var(--text);
         }
 
-        .card-badge {
+        .plan-badge {
             background: var(--accent-gold);
             color: black;
             padding: 4px 8px;
@@ -178,7 +282,7 @@
             margin-left: 10px;
         }
 
-        .card-subtitle {
+        .plan-subtitle {
             color: var(--text-muted);
             font-size: 0.9rem;
             margin-bottom: 15px;
@@ -211,7 +315,7 @@
             color: var(--text);
         }
 
-        .card-price {
+        .plan-price {
             font-size: 1.8rem;
             font-weight: 700;
             color: var(--accent-gold);
@@ -219,13 +323,19 @@
             text-align: center;
         }
 
-        .card-price span {
+        .plan-price span {
             font-size: 1rem;
             color: var(--text-muted);
             font-weight: normal;
         }
 
-        .card-button {
+        .plan-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .plan-button {
             background: linear-gradient(to right, var(--accent), var(--accent-light));
             color: white;
             border: none;
@@ -234,17 +344,28 @@
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            margin-top: 10px;
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
 
-        .card-button:hover {
+        .plan-button:hover {
             background: linear-gradient(to right, var(--accent-light), var(--accent));
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(49, 130, 206, 0.4);
+        }
+
+        .plan-button-secondary {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .plan-button-secondary:hover {
+            background: rgba(49, 130, 206, 0.1);
+            transform: translateY(-2px);
         }
 
         .back-button {
@@ -359,12 +480,75 @@
             font-size: 0.9rem;
         }
 
+        /* ER Tools Section Styles */
+        .er-tools-box {
+            margin: 40px auto;
+            width: 100%;
+            max-width: 850px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tool-card {
+            width: 170px;
+            height: 190px;
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 18px;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+            cursor: pointer;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-7px) scale(1.05);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 6px 35px rgba(0,0,0,0.55);
+        }
+
+        .tool-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 12px;
+            transition: .3s;
+        }
+
+        .tool-card:hover .tool-logo {
+            transform: scale(1.12);
+        }
+
+        .tool-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            letter-spacing: .4px;
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        .er-tools-header {
+            text-align: center;
+            color: white;
+            font-size: 26px;
+            margin-top: 35px;
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
+
         .hidden {
             display: none;
         }
 
         @media (max-width: 768px) {
-            .grid {
+            .providers-grid, .plans-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -372,7 +556,7 @@
                 font-size: 1.8rem;
             }
             
-            .card {
+            .provider-card, .plan-card {
                 padding: 20px;
             }
             
@@ -382,6 +566,28 @@
             
             .stat-number {
                 font-size: 1.5rem;
+            }
+            
+            .plan-buttons {
+                flex-direction: column;
+            }
+            
+            .er-tools-box {
+                gap: 15px;
+            }
+            
+            .tool-card {
+                width: 140px;
+                height: 160px;
+            }
+            
+            .tool-logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .tool-title {
+                font-size: 14px;
             }
         }
 
@@ -401,6 +607,10 @@
             .tagline {
                 font-size: 1rem;
             }
+            
+            .er-tools-header {
+                font-size: 22px;
+            }
         }
     </style>
 </head>
@@ -408,10 +618,10 @@
     <div class="container">
         <header>
             <div class="logo">
-                <i class="fas fa-desktop logo-icon"></i>
-                <div class="logo-text">ER RDP Services</div>
+                <i class="fas fa-cloud logo-icon"></i>
+                <div class="logo-text">ER Cloud RDP</div>
             </div>
-            <p class="tagline">Premium Remote Desktop Solutions with High Performance Infrastructure</p>
+            <p class="tagline">Premium RDP Services on Leading Cloud Platforms</p>
             
             <div class="stats">
                 <div class="stat-item">
@@ -423,176 +633,157 @@
                     <span class="stat-label">Support</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">50ms</span>
-                    <span class="stat-label">Avg Ping</span>
+                    <span class="stat-number">Global</span>
+                    <span class="stat-label">Locations</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">1Gbps</span>
-                    <span class="stat-label">Speed</span>
+                    <span class="stat-number">Instant</span>
+                    <span class="stat-label">Setup</span>
                 </div>
             </div>
         </header>
 
         <main>
-            <section id="rdp-section">
-                <h2 class="section-title">Choose Your RDP Plan</h2>
-                <p class="section-subtitle">All plans include Windows Server 2022, Admin Access, and 99.9% Uptime Guarantee</p>
+            <!-- Cloud Providers Section -->
+            <section id="providers-section">
+                <h2 class="section-title">Choose Your Cloud Provider</h2>
+                <p class="section-subtitle">All providers offer Windows Server 2022 with full admin access and 99.9% uptime guarantee</p>
                 
-                <div class="grid">
-                    <!-- Basic RDP Plan -->
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-star card-icon"></i>
-                            <h3 class="card-title">Basic RDP</h3>
-                        </div>
-                        <p class="card-subtitle">Perfect for light tasks and testing</p>
-                        <ul class="specs">
-                            <li><span class="spec-name">RAM</span><span class="spec-value">2GB DDR4</span></li>
-                            <li><span class="spec-name">CPU</span><span class="spec-value">1 vCore</span></li>
-                            <li><span class="spec-name">Storage</span><span class="spec-value">30GB SSD</span></li>
-                            <li><span class="spec-name">Bandwidth</span><span class="spec-value">1TB/Month</span></li>
-                            <li><span class="spec-name">Location</span><span class="spec-value">USA/EU</span></li>
-                            <li><span class="spec-name">Support</span><span class="spec-value">24/7</span></li>
+                <div class="providers-grid">
+                    <!-- AWS Provider -->
+                    <div class="provider-card" onclick="showPlans('AWS')">
+                        <i class="fab fa-aws provider-icon aws"></i>
+                        <h3 class="provider-title">Amazon Web Services</h3>
+                        <p class="provider-subtitle">Most reliable global infrastructure</p>
+                        <ul class="provider-features">
+                            <li><i class="fas fa-check"></i> Global Network</li>
+                            <li><i class="fas fa-check"></i> Enterprise Grade</li>
+                            <li><i class="fas fa-check"></i> High Performance</li>
                         </ul>
-                        <div class="card-price">$1<span>/day</span></div>
-                        <button class="card-button" onclick="selectPlan('Basic RDP', '$1/day')">
-                            <i class="fas fa-shopping-cart"></i> Order Now
+                        <button class="provider-button">
+                            View RDP Plans <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
 
-                    <!-- Standard RDP Plan -->
-                    <div class="card featured">
-                        <div class="card-header">
-                            <i class="fas fa-gem card-icon"></i>
-                            <h3 class="card-title">Standard RDP <span class="card-badge">POPULAR</span></h3>
-                        </div>
-                        <p class="card-subtitle">Ideal for development and medium workloads</p>
-                        <ul class="specs">
-                            <li><span class="spec-name">RAM</span><span class="spec-value">4GB DDR4</span></li>
-                            <li><span class="spec-name">CPU</span><span class="spec-value">2 vCore</span></li>
-                            <li><span class="spec-name">Storage</span><span class="spec-value">60GB SSD</span></li>
-                            <li><span class="spec-name">Bandwidth</span><span class="spec-value">2TB/Month</span></li>
-                            <li><span class="spec-name">Location</span><span class="spec-value">USA/EU/Asia</span></li>
-                            <li><span class="spec-name">Support</span><span class="spec-value">Priority 24/7</span></li>
+                    <!-- Tencent Provider -->
+                    <div class="provider-card" onclick="showPlans('Tencent')">
+                        <i class="fas fa-cloud provider-icon tencent"></i>
+                        <h3 class="provider-title">Tencent Cloud</h3>
+                        <p class="provider-subtitle">Optimized for Asia region</p>
+                        <ul class="provider-features">
+                            <li><i class="fas fa-check"></i> Asia Focused</li>
+                            <li><i class="fas fa-check"></i> Cost Effective</li>
+                            <li><i class="fas fa-check"></i> High Speed</li>
                         </ul>
-                        <div class="card-price">$2<span>/day</span></div>
-                        <button class="card-button" onclick="selectPlan('Standard RDP', '$2/day')">
-                            <i class="fas fa-shopping-cart"></i> Order Now
+                        <button class="provider-button">
+                            View RDP Plans <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
 
-                    <!-- Professional RDP Plan -->
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-crown card-icon"></i>
-                            <h3 class="card-title">Professional RDP</h3>
-                        </div>
-                        <p class="card-subtitle">For heavy applications and multitasking</p>
-                        <ul class="specs">
-                            <li><span class="spec-name">RAM</span><span class="spec-value">8GB DDR4</span></li>
-                            <li><span class="spec-name">CPU</span><span class="spec-value">4 vCore</span></li>
-                            <li><span class="spec-name">Storage</span><span class="spec-value">120GB SSD</span></li>
-                            <li><span class="spec-name">Bandwidth</span><span class="spec-value">4TB/Month</span></li>
-                            <li><span class="spec-name">Location</span><span class="spec-value">Global</span></li>
-                            <li><span class="spec-name">Support</span><span class="spec-value">Premium 24/7</span></li>
+                    <!-- GCP Provider -->
+                    <div class="provider-card" onclick="showPlans('GCP')">
+                        <i class="fab fa-google provider-icon gcp"></i>
+                        <h3 class="provider-title">Google Cloud</h3>
+                        <p class="provider-subtitle">Fast and secure infrastructure</p>
+                        <ul class="provider-features">
+                            <li><i class="fas fa-check"></i> Premium Network</li>
+                            <li><i class="fas fa-check"></i> AI Powered</li>
+                            <li><i class="fas fa-check"></i> Secure by Default</li>
                         </ul>
-                        <div class="card-price">$4<span>/day</span></div>
-                        <button class="card-button" onclick="selectPlan('Professional RDP', '$4/day')">
-                            <i class="fas fa-shopping-cart"></i> Order Now
+                        <button class="provider-button">
+                            View RDP Plans <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
 
-                    <!-- Enterprise RDP Plan -->
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-rocket card-icon"></i>
-                            <h3 class="card-title">Enterprise RDP</h3>
-                        </div>
-                        <p class="card-subtitle">Maximum performance for critical workloads</p>
-                        <ul class="specs">
-                            <li><span class="spec-name">RAM</span><span class="spec-value">16GB DDR4</span></li>
-                            <li><span class="spec-name">CPU</span><span class="spec-value">8 vCore</span></li>
-                            <li><span class="spec-name">Storage</span><span class="spec-value">240GB SSD</span></li>
-                            <li><span class="spec-name">Bandwidth</span><span class="spec-value">8TB/Month</span></li>
-                            <li><span class="spec-name">Location</span><span class="spec-value">Global+</span></li>
-                            <li><span class="spec-name">Support</span><span class="spec-value">Dedicated Manager</span></li>
+                    <!-- Vultr Provider -->
+                    <div class="provider-card" onclick="showPlans('Vultr')">
+                        <i class="fas fa-server provider-icon vultr"></i>
+                        <h3 class="provider-title">Vultr</h3>
+                        <p class="provider-subtitle">Developer friendly VPS</p>
+                        <ul class="provider-features">
+                            <li><i class="fas fa-check"></i> Simple Pricing</li>
+                            <li><i class="fas fa-check"></i> Global Presence</li>
+                            <li><i class="fas fa-check"></i> Easy to Scale</li>
                         </ul>
-                        <div class="card-price">$7<span>/day</span></div>
-                        <button class="card-button" onclick="selectPlan('Enterprise RDP', '$7/day')">
-                            <i class="fas fa-shopping-cart"></i> Order Now
-                        </button>
-                    </div>
-
-                    <!-- Premium RDP Plan -->
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-server card-icon"></i>
-                            <h3 class="card-title">Premium RDP</h3>
-                        </div>
-                        <p class="card-subtitle">Ultimate power for intensive applications</p>
-                        <ul class="specs">
-                            <li><span class="spec-name">RAM</span><span class="spec-value">32GB DDR4</span></li>
-                            <li><span class="spec-name">CPU</span><span class="spec-value">16 vCore</span></li>
-                            <li><span class="spec-name">Storage</span><span class="spec-value">480GB SSD</span></li>
-                            <li><span class="spec-name">Bandwidth</span><span class="spec-value">Unmetered</span></li>
-                            <li><span class="spec-name">Location</span><span class="spec-value">Any Region</span></li>
-                            <li><span class="spec-name">Support</span><span class="spec-value">24/7 VIP</span></li>
-                        </ul>
-                        <div class="card-price">$12<span>/day</span></div>
-                        <button class="card-button" onclick="selectPlan('Premium RDP', '$12/day')">
-                            <i class="fas fa-shopping-cart"></i> Order Now
-                        </button>
-                    </div>
-
-                    <!-- Custom RDP Plan -->
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-sliders-h card-icon"></i>
-                            <h3 class="card-title">Custom RDP</h3>
-                        </div>
-                        <p class="card-subtitle">Tailored solutions for specific requirements</p>
-                        <ul class="specs">
-                            <li><span class="spec-name">RAM</span><span class="spec-value">Custom</span></li>
-                            <li><span class="spec-name">CPU</span><span class="spec-value">Custom</span></li>
-                            <li><span class="spec-name">Storage</span><span class="spec-value">Custom</span></li>
-                            <li><span class="spec-name">Bandwidth</span><span class="spec-value">Custom</span></li>
-                            <li><span class="spec-name">Location</span><span class="spec-value">Custom</span></li>
-                            <li><span class="spec-name">Support</span><span class="spec-value">Custom</span></li>
-                        </ul>
-                        <div class="card-price">Custom<span>/pricing</span></div>
-                        <button class="card-button" onclick="selectPlan('Custom RDP', 'Custom Pricing')">
-                            <i class="fas fa-comments"></i> Contact Sales
+                        <button class="provider-button">
+                            View RDP Plans <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
                 </div>
             </section>
 
+            <!-- Plans Section -->
+            <section id="plans-section" class="hidden">
+                <button class="back-button" onclick="showProviders()">
+                    <i class="fas fa-arrow-left"></i> Back to Providers
+                </button>
+                <h2 class="section-title" id="plans-title">RDP Plans</h2>
+                <p class="section-subtitle" id="plans-subtitle">Choose the perfect plan for your needs</p>
+                
+                <div class="plans-grid" id="plans-container">
+                    <!-- Plans will be dynamically inserted here -->
+                </div>
+            </section>
+
+            <!-- ER Tools Section -->
+            <h2 class="er-tools-header">ER Official Tools</h2>
+
+            <div class="er-tools-box">
+                <!-- ER Mailer -->
+                <div class="tool-card"
+                     onclick="window.open('https://er-mailer.github.io/ER-Mailer---Download-Center/', '_blank')">
+                    <img src="https://via.placeholder.com/80/3182CE/FFFFFF?text=EM" class="tool-logo">
+                    <div class="tool-title">Email Blasting Software</div>
+                </div>
+
+                <!-- ER Ghost Scraper -->
+                <div class="tool-card"
+                     onclick="window.open('https://er-mailer.github.io/ER-Ghost-Scraper/', '_blank')">
+                    <img src="https://via.placeholder.com/80/EE1C25/FFFFFF?text=GS" class="tool-logo">
+                    <div class="tool-title">Data Collecting Software</div>
+                </div>
+
+                <!-- ER MS365 Tool -->
+                <div class="tool-card"
+                     onclick="window.open('https://er-mailer.github.io/ER-MS365/', '_blank')">
+                    <img src="https://via.placeholder.com/80/4285F4/FFFFFF?text=MS" class="tool-logo">
+                    <div class="tool-title">MS-365 Data Uploader</div>
+                </div>
+
+                <!-- ER Mix & Paid Data Checker -->
+                <div class="tool-card"
+                     onclick="window.open('https://er-mailer.github.io/ER-Data-Checker/', '_blank')">
+                    <img src="https://via.placeholder.com/80/007BFF/FFFFFF?text=DC" class="tool-logo">
+                    <div class="tool-title">ER Data Checker</div>
+                </div>
+            </div>
+
             <div class="features-grid">
                 <div class="feature-card">
                     <i class="fas fa-shield-alt feature-icon"></i>
-                    <h3 class="feature-title">Secure & Private</h3>
-                    <p class="feature-description">Military-grade encryption and isolated environments</p>
+                    <h3 class="feature-title">Secure & Isolated</h3>
+                    <p class="feature-description">Each RDP instance is completely isolated with enterprise-grade security</p>
                 </div>
                 <div class="feature-card">
                     <i class="fas fa-bolt feature-icon"></i>
                     <h3 class="feature-title">High Performance</h3>
-                    <p class="feature-description">SSD storage and latest generation processors</p>
+                    <p class="feature-description">SSD storage and latest generation processors for optimal performance</p>
                 </div>
                 <div class="feature-card">
                     <i class="fas fa-globe feature-icon"></i>
                     <h3 class="feature-title">Global Locations</h3>
-                    <p class="feature-description">Multiple datacenter locations worldwide</p>
+                    <p class="feature-description">Choose from multiple datacenter locations worldwide</p>
                 </div>
                 <div class="feature-card">
                     <i class="fas fa-sync feature-icon"></i>
-                    <h3 class="feature-title">Instant Setup</h3>
-                    <p class="feature-description">Automated deployment within minutes</p>
+                    <h3 class="feature-title">Instant Deployment</h3>
+                    <p class="feature-description">Automated deployment gets you started within minutes</p>
                 </div>
             </div>
 
             <section class="support-section">
                 <h3 class="support-title">Need Help Choosing?</h3>
-                <p class="support-description">Our RDP experts are available 24/7 to help you select the perfect plan for your needs.</p>
+                <p class="support-description">Our cloud experts are available 24/7 to help you select the perfect RDP plan for your needs.</p>
                 <a href="https://wa.me/8801795541326" class="whatsapp-button" target="_blank">
                     <i class="fab fa-whatsapp"></i> Get Free Consultation
                 </a>
@@ -601,19 +792,183 @@
     </div>
 
     <script>
-        function selectPlan(planName, price) {
-            const message = `Hello, I want to purchase RDP Plan:
-Plan: ${planName}
-Price: ${price}
+        // Define plans for each provider
+        const providers = {
+            'AWS': {
+                title: 'Amazon Web Services RDP',
+                subtitle: 'Enterprise-grade RDP on AWS global infrastructure',
+                plans: [
+                    { name: 'AWS Basic', ram: '4GB', cpu: '2 vCPU', storage: '80GB SSD', bandwidth: '2TB', price: '$2/day', featured: false },
+                    { name: 'AWS Standard', ram: '8GB', cpu: '4 vCPU', storage: '160GB SSD', bandwidth: '4TB', price: '$4/day', featured: true },
+                    { name: 'AWS Professional', ram: '16GB', cpu: '8 vCPU', storage: '320GB SSD', bandwidth: '6TB', price: '$7/day', featured: false },
+                    { name: 'AWS Enterprise', ram: '32GB', cpu: '16 vCPU', storage: '640GB SSD', bandwidth: '8TB', price: '$12/day', featured: false },
+                    { name: 'AWS Premium', ram: '64GB', cpu: '32 vCPU', storage: '1.2TB SSD', bandwidth: 'Unmetered', price: '$20/day', featured: false }
+                ]
+            },
+            'Tencent': {
+                title: 'Tencent Cloud RDP',
+                subtitle: 'Cost-effective RDP optimized for Asian markets',
+                plans: [
+                    { name: 'Tencent Basic', ram: '4GB', cpu: '2 vCPU', storage: '80GB SSD', bandwidth: '2TB', price: '$1.8/day', featured: false },
+                    { name: 'Tencent Standard', ram: '8GB', cpu: '4 vCPU', storage: '160GB SSD', bandwidth: '4TB', price: '$3.5/day', featured: true },
+                    { name: 'Tencent Professional', ram: '16GB', cpu: '8 vCPU', storage: '320GB SSD', bandwidth: '6TB', price: '$6.5/day', featured: false },
+                    { name: 'Tencent Enterprise', ram: '32GB', cpu: '16 vCPU', storage: '640GB SSD', bandwidth: '8TB', price: '$11/day', featured: false },
+                    { name: 'Tencent Premium', ram: '64GB', cpu: '32 vCPU', storage: '1.2TB SSD', bandwidth: 'Unmetered', price: '$18/day', featured: false }
+                ]
+            },
+            'GCP': {
+                title: 'Google Cloud RDP',
+                subtitle: 'High-performance RDP on Google\'s premium network',
+                plans: [
+                    { name: 'GCP Basic', ram: '4GB', cpu: '2 vCPU', storage: '80GB SSD', bandwidth: '2TB', price: '$2.7/day', featured: false },
+                    { name: 'GCP Standard', ram: '8GB', cpu: '4 vCPU', storage: '160GB SSD', bandwidth: '4TB', price: '$4.2/day', featured: true },
+                    { name: 'GCP Professional', ram: '16GB', cpu: '8 vCPU', storage: '320GB SSD', bandwidth: '6TB', price: '$7.2/day', featured: false },
+                    { name: 'GCP Enterprise', ram: '32GB', cpu: '16 vCPU', storage: '640GB SSD', bandwidth: '8TB', price: '$13/day', featured: false },
+                    { name: 'GCP Premium', ram: '64GB', cpu: '32 vCPU', storage: '1.2TB SSD', bandwidth: 'Unmetered', price: '$22/day', featured: false }
+                ]
+            },
+            'Vultr': {
+                title: 'Vultr RDP',
+                subtitle: 'Developer-friendly RDP with simple pricing',
+                plans: [
+                    { name: 'Vultr Basic', ram: '4GB', cpu: '2 vCPU', storage: '80GB SSD', bandwidth: '2TB', price: '$1.8/day', featured: false },
+                    { name: 'Vultr Standard', ram: '8GB', cpu: '4 vCPU', storage: '160GB SSD', bandwidth: '4TB', price: '$3/day', featured: true },
+                    { name: 'Vultr Professional', ram: '16GB', cpu: '8 vCPU', storage: '320GB SSD', bandwidth: '6TB', price: '$5.5/day', featured: false },
+                    { name: 'Vultr Enterprise', ram: '32GB', cpu: '16 vCPU', storage: '640GB SSD', bandwidth: '8TB', price: '$10/day', featured: false },
+                    { name: 'Vultr Premium', ram: '64GB', cpu: '32 vCPU', storage: '1.2TB SSD', bandwidth: 'Unmetered', price: '$16/day', featured: false }
+                ]
+            }
+        };
 
-Please provide me with more details.`;
+        // Function to show plans for selected provider
+        function showPlans(provider) {
+            document.getElementById('providers-section').classList.add('hidden');
+            document.getElementById('plans-section').classList.remove('hidden');
+            
+            const providerData = providers[provider];
+            document.getElementById('plans-title').textContent = providerData.title;
+            document.getElementById('plans-subtitle').textContent = providerData.subtitle;
+            
+            const container = document.getElementById('plans-container');
+            container.innerHTML = '';
+            
+            providerData.plans.forEach(plan => {
+                const planCard = document.createElement('div');
+                planCard.className = `plan-card ${plan.featured ? 'featured' : ''}`;
+                planCard.innerHTML = `
+                    <div class="plan-header">
+                        <i class="fas fa-server plan-icon"></i>
+                        <h3 class="plan-title">${plan.name} ${plan.featured ? '<span class="plan-badge">POPULAR</span>' : ''}</h3>
+                    </div>
+                    <p class="plan-subtitle">Perfect for ${getPlanDescription(plan.name)}</p>
+                    <ul class="specs">
+                        <li><span class="spec-name">RAM</span><span class="spec-value">${plan.ram} DDR4</span></li>
+                        <li><span class="spec-name">CPU</span><span class="spec-value">${plan.cpu}</span></li>
+                        <li><span class="spec-name">Storage</span><span class="spec-value">${plan.storage}</span></li>
+                        <li><span class="spec-name">Bandwidth</span><span class="spec-value">${plan.bandwidth}</span></li>
+                        <li><span class="spec-name">Location</span><span class="spec-value">Global</span></li>
+                        <li><span class="spec-name">Support</span><span class="spec-value">24/7</span></li>
+                    </ul>
+                    <div class="plan-price">${plan.price}</div>
+                    <div class="plan-buttons">
+                        <button class="plan-button" onclick="selectPlan('${provider}', '${plan.name}', '${plan.price}', '${plan.ram}', '${plan.cpu}', '${plan.storage}', '${plan.bandwidth}')">
+                            <i class="fas fa-shopping-cart"></i> Order Now
+                        </button>
+                        <button class="plan-button plan-button-secondary" onclick="showPlanDetails('${provider}', '${plan.name}', '${plan.price}', '${plan.ram}', '${plan.cpu}', '${plan.storage}', '${plan.bandwidth}')">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+                    </div>
+                `;
+                container.appendChild(planCard);
+            });
+        }
+
+        // Function to get plan description
+        function getPlanDescription(planName) {
+            if (planName.includes('Basic')) return 'light workloads and testing';
+            if (planName.includes('Standard')) return 'development and medium workloads';
+            if (planName.includes('Professional')) return 'heavy applications and multitasking';
+            if (planName.includes('Enterprise')) return 'critical business workloads';
+            if (planName.includes('Premium')) return 'intensive applications and large-scale projects';
+            return 'various workloads';
+        }
+
+        // Function to go back to providers view
+        function showProviders() {
+            document.getElementById('plans-section').classList.add('hidden');
+            document.getElementById('providers-section').classList.remove('hidden');
+        }
+
+        // Enhanced function to handle plan selection with more details
+        function selectPlan(provider, plan, price, ram, cpu, storage, bandwidth) {
+            const message = `Hello! I'm interested in purchasing an RDP Plan:
+
+📋 **Plan Details:**
+• Provider: ${provider}
+• Plan: ${plan}
+• RAM: ${ram}
+• CPU: ${cpu}
+• Storage: ${storage}
+• Bandwidth: ${bandwidth}
+• Price: ${price}
+
+🚀 **Additional Requirements:**
+• Operating System: Windows Server 2022
+• Admin Access: Required
+• Location Preference: Any Global Datacenter
+
+💳 **Payment Method:**
+Please let me know about available payment options.
+
+⏰ **Setup Time:**
+I need the RDP setup as soon as possible.
+
+Please provide me with complete setup details and next steps.`;
+            
             const encodedMessage = encodeURIComponent(message);
             window.open(`https://wa.me/8801795541326?text=${encodedMessage}`, '_blank');
         }
 
+        // Function to show plan details
+        function showPlanDetails(provider, plan, price, ram, cpu, storage, bandwidth) {
+            const detailsMessage = `
+🔍 **${provider} - ${plan} Detailed Information**
+
+💻 **Technical Specifications:**
+• RAM: ${ram} DDR4
+• CPU: ${cpu}
+• Storage: ${storage} (SSD)
+• Bandwidth: ${bandwidth}
+• Operating System: Windows Server 2022
+• Admin Access: Full Administrator Rights
+• Network: 1Gbps Port
+
+🌍 **Features Included:**
+• 99.9% Uptime SLA
+• 24/7 Technical Support
+• DDoS Protection
+• Daily Backups
+• Remote Desktop Access
+• Multiple User Support
+• Custom Software Installation
+
+💰 **Pricing:**
+${price} (Billed Daily)
+No Setup Fees
+Instant Activation
+
+📞 **Support:**
+24/7 WhatsApp Support Available
+Quick Response Time
+
+Would you like to proceed with ordering this plan?`;
+            
+            alert(detailsMessage);
+        }
+
         // Add animation to cards on scroll
         document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.card');
+            const cards = document.querySelectorAll('.provider-card, .plan-card, .tool-card');
             
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
